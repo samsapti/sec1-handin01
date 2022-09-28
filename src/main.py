@@ -4,7 +4,7 @@ import random
 
 g = 666
 p = 6661
-group = range(p - 2)
+group = range(p - 1)
 
 def encrypt(pk, m):
     r = random.choice(group)
