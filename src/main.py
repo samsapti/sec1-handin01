@@ -23,7 +23,7 @@ def decrypt(sk, c):
 
 # Part one: Send '2000' to Bob
 
-print("Part one\n")
+print("** Part one: **")
 
 bob_pk = 2227
 
@@ -36,7 +36,7 @@ print("Alice sends the following ciphertext to Bob: ", c)
 
 # Part two: Intercept Alice's message
 
-print("\nPart two\n")
+print("\n** Part two: **")
 
 bob_sk = 0
 
@@ -51,7 +51,7 @@ print("Eve decrypts Alice's message: ", decrypt(bob_sk, c))
 
 # Part three
 
-print("\nPart three\n")
+print("\n** Part three: **")
 
 modified_c = (c[0], c[1] * 3)
 modified_m = decrypt(bob_sk, modified_c)
