@@ -1,0 +1,89 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{amsfonts,amsmath}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+}
+
+\title{Security 1 - Mandatory Hand-in 1}
+\date{\today}
+\author{Sam Al-Sapti (sals@itu.dk)}
+
+
+\begin{document}
+    \maketitle
+
+    \section*{Setup}
+
+    I have decided to implement the assignment in Python, as it is a simple
+    language, yet powerful enough for the purposes of the assignment.
+    
+    \section*{Part 1}
+
+    I start by defining variables \texttt{g} and \texttt{p}, and then define
+    \texttt{group} as a list from $0$ to $p - 1$, representing the cyclic
+    group $\mathbb{Z}^*_p$.
+
+    I then define the function \texttt{encrypt(pk, m)}, that uses the ElGamal
+    encryption algorithm to encrypt a plaintext message \texttt{m} with a
+    public key \texttt{pk}, and returns a tuple \texttt{(c1, c2)}. The
+    algorithm goes as follows:
+
+    \begin{enumerate}
+        \item Select a random $r \in \mathbb{Z}^*_p$.
+        \item Compute $c_1 = g^r \bmod p$.
+        \item Compute $c_2 = {pk}^r \cdot m \bmod p$.
+        \item Return the ciphertext $(c_1, c_2)$.
+    \end{enumerate}
+
+    With this function, Alice encrypts the message \texttt{2000} as an
+    integer, using Bob's public key.
+
+    \section*{Part 2}
+
+    For this part, I use a brute-force attack to find Bob's private key. I
+    iterate over \texttt{group} and compare the result of $g^{sk} \bmod p$
+    with Bob's public key, which is known as $2227$, for each \texttt{sk} in
+    \texttt{group}. When an \texttt{sk} is found such that $g^{sk} \bmod p =
+    2227$, the iteration breaks and \texttt{sk} is used as Bob's private key
+    to decrypt Alice's ciphertext, using the function \texttt{decrypt(sk, c)}.
+    Eve finds Bob's private key to be $66$.
+
+    The function takes a private key \texttt{sk} and the ciphertext as the
+    tuple \texttt{c = (c1, c2)}, and follows the following decryption
+    algorithm:
+
+    \begin{enumerate}
+        \item Compute $s = {c_1}^{sk} \bmod p$.
+        \item Compute $m = c_2 \cdot s^{-1} \bmod p$.
+        \item Return $m$.
+    \end{enumerate}
+
+    Due to type conversion issues occurring when dividing integers in Python,
+    I have utilized Euler's Theorem to instead compute $m = c_2 \cdot s^{p -
+    2} \bmod p$ in step 2.
+
+    Using Bob's private key that Eve has found, Alice's ciphertext is
+    successfully decrypted, yielding the original plaintext \texttt{2000}.
+
+    \section*{Part 3}
+
+    In this part of the assignment, Mallory is assumed to know that the
+    original plaintext reads \texttt{2000}.
+
+    The ciphertext contains $(c_1, c_2)$, where $c_2 = {pk}^r \cdot m \bmod
+    p$. By choosing an appropriate modifier $d$, Mallory can successfully
+    compute a new $c_2'$, as long as $d \cdot m < p$ holds. Since Mallory
+    knows the plaintext to be \texttt{2000}, he can choose $d = 3$ to compute
+    $c_2' = {pk}^r \cdot 3m \bmod p$ and modify the ciphertext to $(c_1,
+    c_2')$. Since $m = 2000$ and $3m = 6000$, Bob will get the plaintext
+    \texttt{6000} when he decrypts the modified ciphertext.
+
+
+\end{document}
