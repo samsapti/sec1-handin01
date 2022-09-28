@@ -22,6 +22,8 @@ def decrypt(sk, c1, c2):
 
 # Part one: Send '2000' to Bob
 
+print("Part one")
+
 bob_pk = 2227
 
 m = 2000
@@ -29,3 +31,18 @@ c = encrypt(bob_pk, m)
 
 print("Alice's plaintext message reads: ", m)
 print("Alice sends the following ciphertext to Bob: ", c)
+
+
+# Part two: Intercept Alice's message
+
+print("\nPart two")
+
+bob_sk = 0
+
+for sk in group:
+    if (g ** sk) % p == bob_pk:
+        bob_sk = sk
+        break
+
+print("Eve finds Bob's secret key using a brute-force attack: ", bob_sk)
+print("Eve decrypts Alice's message: ", decrypt(bob_sk, c[0], c[1]))
