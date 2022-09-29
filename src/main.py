@@ -6,6 +6,7 @@ g = 666
 p = 6661
 group = range(p - 1)
 
+
 def encrypt(pk, m):
     r = random.choice(group)
     c1 = (g ** r) % p

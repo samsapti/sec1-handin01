@@ -28,7 +28,7 @@
 
     I start by defining variables \texttt{g} and \texttt{p}, and then define
     \texttt{group} as a list from $0$ to $p - 1$, representing the cyclic
-    group $\mathbb{Z}^*_p$.
+    group $(\mathbb{Z}^*_p, \cdot)$.
 
     I then define the function \texttt{encrypt(pk, m)}, that uses the ElGamal
     encryption algorithm to encrypt a plaintext message \texttt{m} with a
@@ -66,8 +66,9 @@
     \end{enumerate}
 
     Due to type conversion issues occurring when dividing integers in Python,
-    I have utilized Euler's Theorem to instead compute $m = c_2 \cdot s^{p -
-    2} \bmod p$ in step 2.
+    I have utilized Fermat's little
+    theorem\footnote{\url{https://en.wikipedia.org/wiki/Fermat\%27s\_little\_theorem}}
+    to instead compute $m = c_2 \cdot s^{p - 2} \bmod p$ in step 2.
 
     Using Bob's private key that Eve has found, Alice's ciphertext is
     successfully decrypted, yielding the original plaintext \texttt{2000}.
@@ -84,6 +85,5 @@
     $c_2' = {pk}^r \cdot 3m \bmod p$ and modify the ciphertext to $(c_1,
     c_2')$. Since $m = 2000$ and $3m = 6000$, Bob will get the plaintext
     \texttt{6000} when he decrypts the modified ciphertext.
-
 
 \end{document}
